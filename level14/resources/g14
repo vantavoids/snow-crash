@@ -1,0 +1,8 @@
+#gdb -q -batch -x g14 /bin/getflag
+break *0x804898e      # the 'test eax,eax' right after call ptrace
+break *0x8048b02      # right after call getuid
+run
+set $eax = 0          # ptrace "succeeded", we're not being ptrace'd :D!!
+continue
+set $eax = 0xbc6      # getuid() "returns" flag14's uid
+continue
