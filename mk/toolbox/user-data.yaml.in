@@ -1,0 +1,55 @@
+#cloud-config
+# Runs once per fresh disk. Edits need make toolbox-destroy then make toolbox.
+hostname: snowcrash-toolbox
+
+bootcmd:
+  - [ sh, -c, 'g=$(getent group @HOST_GID@ | cut -d: -f1); [ -n "$g" ] || { groupadd -g @HOST_GID@ @TB_USER@ && g=@TB_USER@; }; getent passwd @HOST_UID@ >/dev/null || useradd -u @HOST_UID@ -g "$g" -m -s /bin/bash @TB_USER@' ]
+
+users:
+  - name: @TB_USER@
+    uid: @HOST_UID@
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    shell: /bin/bash
+    lock_passwd: false
+    plain_text_passwd: snowcrash
+    ssh_authorized_keys:
+      - @SSH_PUBKEY@
+ssh_pwauth: true
+
+package_update: true
+packages:
+  - john
+  - tshark
+  - tcpdump
+  - netcat-openbsd
+  - curl
+  - build-essential
+  - gcc-multilib
+  - gdb
+  - binutils
+  - ltrace
+  - strace
+  - python3
+  - xxd
+  - bsdextrautils
+  - sshpass
+  - openssh-client
+  - git
+  - file
+
+write_files:
+  - path: /etc/motd
+    content: |
+
+      Snow Crash toolbox. Everything we used to solve it, minus IDA.
+        john  tshark  tcpdump  gdb  gcc-multilib  nc  curl  sshpass  strace  ltrace
+
+      The target VM is reachable through the host:
+        ssh -p 4242 level00@10.0.2.2
+
+      The project (walkthroughs + scripts) is copied to ~/snowcrash
+
+runcmd:
+  # Debian ships john & friends in /usr/sbin; link them where a normal PATH looks
+  - [ sh, -c, 'for b in john unshadow unique mailer unafs; do ln -sf /usr/sbin/$b /usr/local/bin/$b; done' ]
+  - [ sh, -c, 'sed -i "s/^#force_color_prompt=yes/force_color_prompt=yes/" /etc/skel/.bashrc /home/@TB_USER@/.bashrc 2>/dev/null || true' ]

@@ -142,3 +142,6 @@ $(VM_ISO):
 	fi
 	@mv $@.part $@
 	@echo "$(call ann,Green) Down. No checksum published, so the byte count will have to do"
+
+# toolbox VM: the attacker workstation (john, tshark, gdb, ...) that talks to the target
+-include mk/toolbox.mk
