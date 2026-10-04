@@ -50,4 +50,4 @@ Check flag.Here is your token : qi0maab88jeaj46qoumi7maus
 
 The binary thought it was saying "Exploit me". It was actually running `getflag` with flag03's privileges and reading us the token. Rude of it, really.
 
-(The `echo` script in this folder is that fake. `/tmp` gets wiped periodically on this box, so just recreate it if it vanishes.)
+(The `echo` script in this folder is that fake, prebuilt. It's a one-liner so typing it is easiest, but you can also copy it from the toolbox: `scp -P 4242 ~/snowcrash/level03/resources/echo level03@10.0.2.2:/tmp/echo`. `/tmp` gets wiped periodically, so recreate it if it vanishes.)

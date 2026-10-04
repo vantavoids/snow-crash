@@ -43,11 +43,20 @@ int getuid(void) { return 4242; }
 
 One catch: the dynamic loader **ignores** `LD_PRELOAD` for setuid binaries (otherwise every setuid program would be trivially hijackable). So we run a non-setuid copy instead. That's fine here, because the token lives inside the binary, it doesn't need flag13's privileges to be printed, only the UID check standing in the way.
 
+`gu.c` in this folder is the override. It compiles against the target's 32-bit libc, so build and run it on the target. From the toolbox, copy the source over and log in:
+
 ```bash
-$ gcc -shared -fPIC -o /tmp/gu.so gu.c
+scp -P 4242 ~/snowcrash/level13/resources/gu.c level13@10.0.2.2:/tmp/
+ssh -p 4242 level13@10.0.2.2        # password: g1qKMiRpXf53AWhDaU7FEkczr
+```
+
+Then on the target:
+
+```bash
+$ gcc -shared -fPIC -o /tmp/gu.so /tmp/gu.c
 $ cp ~/level13 /tmp/l13
 $ LD_PRELOAD=/tmp/gu.so /tmp/l13
 your token is 2A31L79asukciNyi8uppkEuSx
 ```
 
-Our fake `getuid` answers 4242, the bouncer waves us through, and the binary reads out the token. `gu.c` in this folder is the override.
+Our fake `getuid` answers 4242, the bouncer waves us through, and the binary reads out the token.

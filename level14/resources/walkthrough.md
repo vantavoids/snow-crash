@@ -30,6 +30,13 @@ So getflag already contains every flag's token, encrypted, and just decrypts the
 
 So gdb works fine, you just have to lie to it. First you tell it `ptrace` succeeded. Then you tell it you're flag14. Next you're gonna tell it Santa exists.
 
+Both routes below run on the target, against its `/bin/getflag`. From the toolbox, copy the two helpers over and log in:
+
+```bash
+scp -P 4242 ~/snowcrash/level14/resources/g14 ~/snowcrash/level14/resources/patch.py level14@10.0.2.2:/tmp/
+ssh -p 4242 level14@10.0.2.2        # password: 2A31L79asukciNyi8uppkEuSx
+```
+
 ## route A: gdb, spoof both returns
 
 `0x804898e` is the `test eax, eax` right after `call ptrace` (force `eax` >= 0), and `0x8048b02` is right after `call getuid` (force `eax` = `0xbc6` = 3014):
@@ -45,7 +52,7 @@ continue
 ```
 
 ```bash
-$ gdb -q -batch -x g14 /bin/getflag
+$ gdb -q -batch -x /tmp/g14 /bin/getflag
 Check flag.Here is your token : 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
 ```
 
@@ -59,7 +66,7 @@ At `0x8048afd` the code is `call getuid@plt` (`e8 ae f9 ff ff`, 5 bytes), and it
 
 ```bash
 $ cp /bin/getflag /tmp/gf
-$ python2 patch.py            # overwrites the call with mov eax, 0xbc6
+$ python2 /tmp/patch.py       # overwrites the call with mov eax, 0xbc6
 $ /tmp/gf
 Check flag.Here is your token : 7QiHafiNa3HVozsaXkawuYrTstxbpABHD8CPnHJ
 ```

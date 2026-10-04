@@ -46,12 +46,21 @@ The plan:
 
 Most runs lose (it opens the dummy, or `access` fails on the token). But eventually the stars align: `access()` fires while the link points at the dummy (pass), then the link flips to `token` before `open()`, and flag10 happily ships us the token.
 
+The race has to run on the target (the binary, the token and the loopback listener all live there). From the toolbox, copy the script over and log in:
+
 ```bash
-$ sh race.sh
+scp -P 4242 ~/snowcrash/level10/resources/race.sh level10@10.0.2.2:/tmp/
+ssh -p 4242 level10@10.0.2.2        # password: s5cAJpM8ev6XHw998pRWG728z
+```
+
+Then run it on the target:
+
+```bash
+$ sh /tmp/race.sh
 woupa2yuojeeaaed06riuj63c
 ```
 
-`race.sh` in this folder runs all three loops for ~55s and filters the listener output down to the one line that isn't the dummy or the server's `.*( )*.` banner. On a quiet box it usually wins within a few seconds. That string is flag10's password.
+`race.sh` runs all three loops for ~55s and filters the listener output down to the one line that isn't the dummy or the server's `.*( )*.` banner. On a quiet box it usually wins within a few seconds. That string is flag10's password.
 
 ## finishing the job
 
